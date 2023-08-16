@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+<div class="card">
+	<div class="row no-gutters">
+		<aside class="col-md-6">
+<article class="gallery-wrap"> 
+	{% for img in product.productimage_set.all %}
+	{% if img == product.productimage_set.all.first %}
+	<div class="img-big-wrap">
+	   <img src="{{img.image.url}}">
+	</div> <!-- img-big-wrap.// -->
+	{% endif %}
+{% endfor %}
+</article> <!-- gallery-wrap .end// -->
+		</aside>
+		<main class="col-md-6 border-left">
+<article class="content-body">
+
+<h2 class="title">{{product.title}}</h2>
+
+<div class="mb-3"> 
+	<var class="price h4">${{product.price}}</var> 
+</div> 
+
+<p>{{product.description|safe}}</p>
+<!-- <div class="container">
+	<div class="w-100 mt-5">
+		<div class="row shadow-sm">
+			<div class="col-4 p-3">
+				<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-inner">
+						{% for img in product.productimage_set.all %}
+						{% if img == product.productimage_set.all.first %}
+						<div class="carousel-item active thumbnail shadow-sm">
+							<img src="{{img.image.url}}" width="400" height="270" class="d-block w-100">
+						</div>
+						{% else %}
+						<div class="carousel-item thumbnail shadow-sm">
+							<img src="{{img.image.url}}" width="400" height="270" class="d-block w-100">
+						</div>
+						{% endif %}
+						{% endfor %}
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-targets="#carouselExampleCaptions">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="d-block w-100">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-targets="#carouselExampleCaptions">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="d-block w-100">Next</span>
+					</button>
+				</div>
+			</div>
+			<div class="col-7 p-5">
+				<h4>{{product.title}}</h4>
+				<p class="test-muted"><a href="{% url 'usersapp:profile' product.author.username %}">@{{product.author.username}}</a> | {{product.date}}</p>
+				<p>{{product.description|safe}}</p>
+			</div>
+		</div>
+	</div>
+</div> -->
+<hr>
+	<div class="row">
+		<div class="item-option-select">
+			<p class="test-muted"><a href="{% url 'usersapp:profile' product.author.username %}">@{{product.author.username}}</a> | {{product.date}}</p>
+			<div class="contact my-4">
+				{% if request.user == product.author %}
+				<a href="{% url 'productsapp:update' product.id %}" class="btn btn-warning">Edit detail</a>
+				{% endif %}
+				<a href="mailto:{{customuser.email}}" class="btn btn-primary">Email</a>
+				<a href="tel:{{product.phone_number}}" class="btn btn-primary">Call</a>
+				<a href="http://t.me/@{{product.tg_username }}" class="btn btn-primary">Telegram</a>
+			</div> 
+		</div>
+	</div> <!-- row.// -->
+	<hr>
+	{% if product in saveds %}
+	<a href="{% url 'usersapp:addremovesaved' product.id %}" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
+	{% else %}
+	<a href="{% url 'usersapp:addremovesaved' product.id %}" class="btn  btn-success"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a>
+	{% endif %}
+</article> <!-- product-info-aside .// -->
+		</main> <!-- col.// -->
+	</div> <!-- row.// -->
+</div> <!-- card.// -->
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+<br>
+
+{% for i in product.category.product_set.all %}
+<div class="row">
+	<div class="col-8 mt-5">
+		{% if product != i %}
+		<h6>In This Category</h6>
+		<div class="d-flex flex-wrap justify-content-between">
+			<div class="card border border-0 shadow-sm d-inline-block m-1 mt-3" style="width: 14rem;">
+			<img src="{{i.productimage_set.all.first.image.url}}" class="card-img-top" width="300">
+			<div class="card-body">
+				<h6 class="align-center card-title">{{i.title}}</h6>
+				<span class="center card-text">${{i.price}}</span>
+				<div class="buttons d-flex flex-wrap justify-content-between">
+					<i class="bi bi-bookmark-fill"></i>
+					<a href="{% url 'productsapp:detail' i.id %}" class="btn btn-outline-primary">Details</a>
+				</div>
+			</div>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+{% endfor %}
+
+<div class="col-4 mt-5 shadow-sm">
+	<h6 class="pt-2">Add comment</h6>
+	<form action="{% url 'productsapp:comment_new' product.id %}" method="post" class="input-group">{% csrf_token %}
+		<input type="text" class="form-control" name='body' placeholder='Type your comment...' aria->
+		<button class="btn btn-outline-success" id='button-addon'>Send</button>
+	</form>
+	<hr>
+	<h6>Comments</h6>
+	{% for comment in product.comment_set.all %}
+	<small class="text-muted">@{{comment.author}} | {{comment.date}}</small>
+	<p>{{comment.body}}
+		{% if request.user == comment.author %}
+		<small><a href="{% url 'productsapp:comment_delete' product.id comment.id %}">Delete</a></small>
+		{% endif %}
+	</p>
+	{% endfor %}
+</div>
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock content %}

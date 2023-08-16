@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  django:
+    build: .
+    command: >
+      sh -c "python manage.py migrate"
+    ports:
+      - "8000:8001"
+    env_file:
+      - .env
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - django
+
+volumes:
+  static_volume:
+  media_volume:

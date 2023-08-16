@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ========================= SECTION MAIN ========================= -->
+    <section class="section-intro padding-y-sm">
+		<div class="container">
+	
+		<div class="intro-banner-wrap">
+			<img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded">
+		</div>
+	
+		</div> <!-- container //  -->
+		</section>
+		<!-- ========================= SECTION MAIN END// ========================= -->
+	
+		<!-- ========================= SECTION  ========================= -->
+		<section class="section-name padding-y-sm">
+		<div class="container">
+	
+		<header class="section-heading">
+			<h3 class="section-title">Recently Viewed Products</h3>
+		</header><!-- sect-heading -->
+	
+		<div class="row">
+			{% for i in products %}
+			<div class="col-md-3">
+				<div class="card card-product-grid">
+					{% if i.productimage_set.exists %}
+					<a href="{% url 'productsapp:detail' i.id %}" class="img-wrap"> <img src="{{i.productimage_set.all.first.image.url}}"> </a>
+					{% endif %}
+					<figcaption class="info-wrap">
+						<a href="{% url 'productsapp:detail' i.id %}" class="title">{{i.title}}</a>
+						<div class="price mt-1">{{i.price}}</div> <!-- price-wrap.// -->
+					</figcaption>
+				</div>
+			</div>
+			{% endfor %}
+		</div> <!-- row.// -->
+		</div><!-- container // -->
+		</section>
+		<!-- ========================= SECTION  END// ========================= -->
+
+{% endblock content %}

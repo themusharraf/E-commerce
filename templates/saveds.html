@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ========================= SECTION MAIN ========================= -->
+    <section class="section-intro padding-y-sm">
+		<div class="container">
+		</div> <!-- container //  -->
+		</section>
+		<!-- ========================= SECTION MAIN END// ========================= -->
+	
+		<!-- ========================= SECTION  ========================= -->
+		<section class="section-name padding-y-sm">
+		<div class="container">
+	
+		<header class="section-heading">
+			<h3 class="section-title">Saved Products of @{{request.user}}</h3>
+		</header><!-- sect-heading -->
+	
+		<div class="row">
+			{% for i in saveds %}
+			<div class="col-md-3">
+				<div class="card card-product-grid">
+					{% if i.product.productimage_set.exists %}
+					<a href="{% url 'productsapp:detail' i.product.id %}" class="img-wrap"> <img src="{{i.product.productimage_set.all.first.image.url}}"> </a>
+					{% endif %}
+					<figcaption class="info-wrap">
+						<a href="{% url 'productsapp:detail' i.product.id %}" class="title">{{i.product.title}}</a>
+						<div class="price mt-1">{{i.product.price}}</div> <!-- price-wrap.// -->
+					</figcaption>
+				</div>
+			</div>
+			{% endfor %}
+		</div> <!-- row.// -->
+		</div><!-- container // -->
+		</section>
+		<!-- ========================= SECTION  END// ========================= -->
+
+{% endblock content %}

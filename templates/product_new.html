@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- ============================ COMPONENT REGISTER   ================================= -->
+	<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+      <article class="card-body">
+		<header class="mb-4"><h4 class="card-title">New Product</h4></header>
+			<form method='post' enctype="multipart/form-data">{% csrf_token %}
+			{{form|crispy}}
+			<button class="btn btn-primary">Submit</button>
+			</form><br>
+		</article><!-- card-body.// -->
+    </div> <!-- card .// -->
+    <p class="text-center mt-4"><a href="{% url 'main:index' %}">Back home</a></p>
+   <br><br>
+<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock content %}
+</body>
+</html>
